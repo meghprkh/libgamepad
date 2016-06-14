@@ -1,0 +1,24 @@
+<?xml version="1.0"?><!--*- mode: nxml; indent-tabs-mode: nil -*-->
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<!-- vim:set ts=2 expandtab: -->
+<moduleset>
+
+<!-- git repos -->
+  <repository type="git" name="github.com"
+      href="git://github.com/"/>
+
+  <include href="gnome-suites-core-3.20.modules"/>
+
+  <cmake id="libgamepad" cmakeargs="-DBUILD_VALADOC=ON" makeargs="all">
+    <branch repo="github.com"
+            module="meghprkh/libgamepad.git"/>
+    <dependencies>
+      <dep package="glib"/>
+      <dep package="vala"/>
+      <dep package="valadoc"/>
+      <dep package="gudev"/>
+    </dependencies>
+  </cmake>
+
+</moduleset>
