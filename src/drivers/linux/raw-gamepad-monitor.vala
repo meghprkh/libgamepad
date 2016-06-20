@@ -6,7 +6,7 @@ private class LibGamepad.LinuxRawGamepadMonitor : Object, RawGamepadMonitor {
 		client.uevent.connect(udev_client_callback);
 	}
 
-	public delegate void ForeachGamepadCallback(string identifier, Guid guid, string? raw_name = null);
+	public delegate void ForeachGamepadCallback(string identifier, string guid, string? raw_name = null);
 	public void foreach_gamepad (ForeachGamepadCallback cb) {
 		client.query_by_subsystem("input").foreach((dev) => {
 			if (dev.get_device_file() == null) return;

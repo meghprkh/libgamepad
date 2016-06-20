@@ -1,6 +1,6 @@
 private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 	public string name { get; protected set; }
-	public Guid guid { get; protected set; }
+	public string guid { get; protected set; }
 
 	public uint8 naxes { get; protected set; default = 0; }
 	public uint8 nbuttons { get; protected set; default = 0; }

@@ -53,9 +53,9 @@ public class LibGamepad.Mappings {
 	 * @param  guid          The guid of the wanted gamepad
 	 * @return The name if present in the database
 	 */
-	public static string? get_name (Guid guid) {
+	public static string? get_name (string guid) {
 		init_if_not ();
-		return names.get(guid.to_string ());
+		return names.get(guid);
 	}
 
 	/**
@@ -63,8 +63,8 @@ public class LibGamepad.Mappings {
 	 * @param  guid          The guid of the wanted gamepad
 	 * @return The mapping if present in the database
 	 */
-	public static string? get_mapping (Guid guid) {
+	public static string? get_mapping (string guid) {
 		init_if_not ();
-		return mappings.get(guid.to_string ());
+		return mappings.get(guid);
 	}
 }

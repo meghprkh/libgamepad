@@ -1,6 +1,6 @@
 private class LibGamepad.LinuxGuidHelpers : Object {
-	public static Guid from_dev (Libevdev.Evdev dev) {
-		uint16[] guid = new uint16[8];
+	public static string from_dev (Libevdev.Evdev dev) {
+		uint16 guid[8];
 		guid[0] = dev.id_bustype.to_little_endian ();
 	    guid[1] = 0;
 		guid[2] = dev.id_vendor.to_little_endian ();
@@ -9,10 +9,10 @@ private class LibGamepad.LinuxGuidHelpers : Object {
 	    guid[5] = 0;
 		guid[6] = dev.id_version.to_little_endian ();
 	    guid[7] = 0;
-		return new Guid.from_data(guid);
+		return uint16s_to_hex_string(guid);
 	}
 
-	public static Guid from_file (string file_name) throws FileError {
+	public static string from_file (string file_name) throws FileError {
 	   	var fd = Posix.open (file_name, Posix.O_RDONLY | Posix.O_NONBLOCK);
 
 	   	if (fd < 0)
@@ -22,7 +22,7 @@ private class LibGamepad.LinuxGuidHelpers : Object {
 	   	if (dev.set_fd(fd) < 0)
 	   		throw new FileError.FAILED (@"Evdev error on opening file $file_name: $(Posix.strerror(Posix.errno))");
 
-		Guid guid = from_dev (dev);
+		string guid = from_dev (dev);
 		Posix.close(fd);
 		return guid;
 	}

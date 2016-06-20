@@ -28,7 +28,7 @@ vala_check_package: gudev-1.0
 *vala_source: drivers/linux/raw-gamepad.vala
 *vala_source: gamepad-monitor.vala
 *vala_source: gamepad.vala
-*vala_source: guid.vala
+*vala_source: helpers.vala
 *vala_source: input-type.vala
 *vala_source: mapping-helpers.vala
 *vala_source: mappings.vala

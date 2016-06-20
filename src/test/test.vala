@@ -4,11 +4,11 @@ int main () {
 	var gm = new LibGamepad.GamepadMonitor();
 	var g = new LibGamepad.Gamepad();
 	gm.on_plugin.connect((guid, name) => {
-		print(@"GM Plugged in $(guid.to_string()) - $name\n");
+		print(@"GM Plugged in $guid - $name\n");
 		g.open(guid);
 	});
 
-	gm.on_unplug.connect((guid, name) => print (@"GM Unplugged $(guid.to_string()) - $name\n"));
+	gm.on_unplug.connect((guid, name) => print (@"GM Unplugged $guid - $name\n"));
 
 	gm.foreach_gamepad((guid, name) => {
 		print(@"Initial plugged in $guid - $name\n");

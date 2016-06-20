@@ -6,7 +6,7 @@ src/drivers/linux/raw-gamepad-monitor.vala
 src/drivers/linux/raw-gamepad.vala
 src/gamepad-monitor.vala
 src/gamepad.vala
-src/guid.vala
+src/helpers.vala
 src/input-type.vala
 src/mapping-helpers.vala
 src/mappings.vala

@@ -34,7 +34,7 @@ public class LibGamepad.Gamepad : Object {
 	/**
 	 * The guid
 	 */
-	public Guid? guid { get; private set; }
+	public string? guid { get; private set; }
 	/**
 	 * The name present in our database
 	 */
@@ -51,7 +51,7 @@ public class LibGamepad.Gamepad : Object {
 	private int[] axes_value;
 	private Hat[] hats;
 
-	public Gamepad (Guid? guid = null) throws FileError {
+	public Gamepad (string? guid = null) throws FileError {
 		open(guid);
 	}
 
@@ -59,7 +59,7 @@ public class LibGamepad.Gamepad : Object {
 	 * Open another gamepad in the current one's place
 	 * @param  guid          The guid of the gamepad you want to open
 	 */
-	public void open (Guid? guid = null) throws FileError {
+	public void open (string? guid = null) throws FileError {
 		if (guid == null) return;
 		raw_gamepad = GamepadMonitor.get_raw_gamepad (guid);
 		if (raw_gamepad == null) return;
