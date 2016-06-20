@@ -3,16 +3,16 @@ int main () {
 	/*print(@"$(Constants.PKGDATADIR)");*/
 	var gm = new LibGamepad.GamepadMonitor();
 	var g = new LibGamepad.Gamepad();
-	gm.on_plugin.connect((guid, name) => {
-		print(@"GM Plugged in $guid - $name\n");
-		g.open(guid);
+	gm.on_plugin.connect((identifier, guid, name) => {
+		print(@"GM Plugged in $identifier - $guid - $name\n");
+		g.open(identifier);
 	});
 
-	gm.on_unplug.connect((guid, name) => print (@"GM Unplugged $guid - $name\n"));
+	gm.on_unplug.connect((identifier, guid, name) => print (@"GM Unplugged $identifier - $guid - $name\n"));
 
-	gm.foreach_gamepad((guid, name) => {
+	gm.foreach_gamepad((identifier, guid, name) => {
 		print(@"Initial plugged in $guid - $name\n");
-		g.open (guid);
+		g.open (identifier);
 	});
 
 	g.button_event.connect((button, value) => print(@"$(button.to_string()) - $value\n"));

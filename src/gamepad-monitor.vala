@@ -10,18 +10,20 @@ public class LibGamepad.GamepadMonitor : Object {
 	public static uint ngamepads { get; private set; default = 0; }
 	/**
 	 * Emitted when a gamepad is plugged in
-	 * @param  guid   The guid of the plugged in gamepad
-	 * @param  name   The name of the plugged in gamepad
+	 * @param  identifier   The identifier of the plugged in gamepad
+	 * @param  guid         The guid of the plugged in gamepad
+	 * @param  name         The name of the plugged in gamepad
 	 */
-	public signal void on_plugin (string guid, string? name);
+	public signal void on_plugin (string identifier, string guid, string? name);
 	/**
 	 * Emitted when a gamepad is unplugged
+	 * @param  identifier    The identifier of the unplugged gamepad
 	 * @param  guid          The guid of the unplugged gamepad
 	 * @param  name          The name of the unplugged gamepad
 	 */
-	public signal void on_unplug (string guid, string? name);
+	public signal void on_unplug (string identifier, string guid, string? name);
 
-	public delegate void ForeachGamepadCallback(string guid, string? name);
+	public delegate void ForeachGamepadCallback(string identifier, string guid, string? name);
 	/**
 	 * This function allows to iterate over all gamepads
 	 * @param    cb          The callback
@@ -30,7 +32,7 @@ public class LibGamepad.GamepadMonitor : Object {
 		identifier_to_guid.foreach ((identifier, guid) => {
 			var name = Mappings.get_name (guid);
 			if (name == null) name = guid_to_raw_name.get (guid.to_string ());
-			cb(guid, name);
+			cb(identifier, guid, name);
 		});
 	}
 
@@ -52,12 +54,11 @@ public class LibGamepad.GamepadMonitor : Object {
 	/**
 	 * This static function returns a raw gamepad given a guid. It can be used
 	 * for creating interfaces for remappable-controls.
-	 * @param  guid         The guid of the raw gamepad that you want
+	 * @param  identifier         The identifier of the raw gamepad that you want
 	 */
-	public static RawGamepad? get_raw_gamepad (string guid) {
+	public static RawGamepad? get_raw_gamepad (string identifier) {
 		init_static_if_not();
 
-		var identifier = guid_to_identifier.get (guid.to_string ());
 		if (identifier == null) return null;
 		else {
 			var rg = new LinuxRawGamepad (identifier);
@@ -91,7 +92,7 @@ public class LibGamepad.GamepadMonitor : Object {
 		add_gamepad (identifier, guid, raw_name);
 		var name = Mappings.get_name (guid);
 		if (name == null) name = guid_to_raw_name.get (guid.to_string ());
-		on_plugin (guid, name);
+		on_plugin (identifier, guid, name);
 	}
 
 	private void on_raw_unplug (string identifier) {
@@ -100,6 +101,6 @@ public class LibGamepad.GamepadMonitor : Object {
 		ngamepads--;
 		identifier_to_guid.remove (identifier);
 		guid_to_identifier.remove (guid.to_string ());
-		on_unplug (guid, Mappings.get_name (guid));
+		on_unplug (identifier, guid, Mappings.get_name (guid));
 	}
 }

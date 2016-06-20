@@ -51,17 +51,17 @@ public class LibGamepad.Gamepad : Object {
 	private int[] axes_value;
 	private Hat[] hats;
 
-	public Gamepad (string? guid = null) throws FileError {
-		open(guid);
+	public Gamepad (string? identifier = null) throws FileError {
+		open(identifier);
 	}
 
 	/**
 	 * Open another gamepad in the current one's place
-	 * @param  guid          The guid of the gamepad you want to open
+	 * @param  identifier        The identifier of the gamepad you want to open
 	 */
-	public void open (string? guid = null) throws FileError {
-		if (guid == null) return;
-		raw_gamepad = GamepadMonitor.get_raw_gamepad (guid);
+	public void open (string? identifier = null) throws FileError {
+		if (identifier == null) return;
+		raw_gamepad = GamepadMonitor.get_raw_gamepad (identifier);
 		if (raw_gamepad == null) return;
 
 		mapped = false;
