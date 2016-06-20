@@ -37,7 +37,7 @@ public class LibGamepad.GamepadMonitor : Object {
 	public GamepadMonitor() {
 		init_static_if_not();
 
-		var gm = new LinuxRawGamepadMonitor ();
+		gm = new LinuxRawGamepadMonitor ();
 
 		gm.on_plugin.connect (on_raw_plugin);
 		gm.on_unplug.connect (on_raw_unplug);
