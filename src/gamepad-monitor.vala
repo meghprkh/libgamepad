@@ -10,11 +10,9 @@ public class LibGamepad.GamepadMonitor : Object {
 	public static uint ngamepads { get; private set; default = 0; }
 	/**
 	 * Emitted when a gamepad is plugged in
-	 * @param  identifier   The identifier of the plugged in gamepad
-	 * @param  guid         The guid of the plugged in gamepad
-	 * @param  name         The name of the plugged in gamepad
+	 * @param  g    The gamepad
 	 */
-	public signal void on_plugin (string identifier, string guid, string? name);
+	public signal void on_plugin (Gamepad g);
 	/**
 	 * Emitted when a gamepad is unplugged
 	 * @param  identifier    The identifier of the unplugged gamepad
@@ -23,16 +21,15 @@ public class LibGamepad.GamepadMonitor : Object {
 	 */
 	public signal void on_unplug (string identifier, string guid, string? name);
 
-	public delegate void ForeachGamepadCallback(string identifier, string guid, string? name);
+	public delegate void ForeachGamepadCallback(Gamepad g);
 	/**
 	 * This function allows to iterate over all gamepads
 	 * @param    cb          The callback
 	 */
 	public void foreach_gamepad (ForeachGamepadCallback cb) {
 		identifier_to_guid.foreach ((identifier, guid) => {
-			var name = Mappings.get_name (guid);
-			if (name == null) name = guid_to_raw_name.get (guid.to_string ());
-			cb(identifier, guid, name);
+			var rg = get_raw_gamepad(identifier);
+			cb(new Gamepad(rg));
 		});
 	}
 
@@ -90,9 +87,8 @@ public class LibGamepad.GamepadMonitor : Object {
 
 	private void on_raw_plugin (string identifier, string guid, string? raw_name = null) {
 		add_gamepad (identifier, guid, raw_name);
-		var name = Mappings.get_name (guid);
-		if (name == null) name = guid_to_raw_name.get (guid.to_string ());
-		on_plugin (identifier, guid, name);
+		var rg = new LinuxRawGamepad (identifier);
+		on_plugin(new Gamepad(rg));
 	}
 
 	private void on_raw_unplug (string identifier) {

@@ -43,30 +43,23 @@ public class LibGamepad.Gamepad : Object {
 	 * The raw gamepad behind this gamepad
 	 */
 	public RawGamepad raw_gamepad { get; private set; }
+	/**
+	 * Whether this gamepad is mapped
+	 */
+	public bool mapped { get; private set; }
 
-	private bool mapped;
 	private InputType[] buttons;
 	private int[] buttons_value;
 	private InputType[] axes;
 	private int[] axes_value;
 	private Hat[] hats;
 
-	public Gamepad (string? identifier = null) throws FileError {
-		open(identifier);
-	}
-
-	/**
-	 * Open another gamepad in the current one's place
-	 * @param  identifier        The identifier of the gamepad you want to open
-	 */
-	public void open (string? identifier = null) throws FileError {
-		if (identifier == null) return;
-		raw_gamepad = GamepadMonitor.get_raw_gamepad (identifier);
-		if (raw_gamepad == null) return;
-
+	public Gamepad (RawGamepad rg) throws FileError {
+		raw_gamepad = rg;
 		mapped = false;
 		raw_name = raw_gamepad.name;
-		this.guid = raw_gamepad.guid;
+		guid = raw_gamepad.guid;
+		name = Mappings.get_name (guid) ?? raw_name;
 		buttons.resize (raw_gamepad.nbuttons);
 		buttons_value.resize (raw_gamepad.nbuttons);
 		axes.resize (raw_gamepad.naxes);

@@ -1,4 +1,5 @@
 private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
+	public string identifier { get; protected set; }
 	public string name { get; protected set; }
 	public string guid { get; protected set; }
 
@@ -16,6 +17,7 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 	private Linux.Input.AbsInfo abs_info[Linux.Input.ABS_MAX];
 
 	public LinuxRawGamepad (string file_name) throws FileError {
+		identifier = file_name;
 		fd = Posix.open (file_name, Posix.O_RDONLY | Posix.O_NONBLOCK);
 
 		if (fd < 0)

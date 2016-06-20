@@ -33,6 +33,7 @@ public interface LibGamepad.RawGamepad : Object {
 	 */
 	public abstract signal void unplug ();
 
+	public abstract string identifier { get; protected set; }
 	public abstract string name { get; protected set; }
 	public abstract string guid { get; protected set; }
 
