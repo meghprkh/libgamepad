@@ -36,9 +36,9 @@ private class LibGamepad.LinuxRawGamepadMonitor : Object, RawGamepadMonitor {
 				} catch (FileError err) {
 					return;
 				}
-				on_plugin (raw_gamepad);
+				gamepad_plugged (raw_gamepad);
 			} else if (action == "remove") {
-				on_unplug (identifier);
+				gamepad_unplugged (identifier);
 			}
 		}
 	}

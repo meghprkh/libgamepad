@@ -13,7 +13,7 @@ public class LibGamepad.GamepadMonitor : Object {
 	 * Emitted when a gamepad is plugged in
 	 * @param  g    The gamepad
 	 */
-	public signal void on_plugin (Gamepad g);
+	public signal void gamepad_plugged (Gamepad g);
 
 	/**
 	 * Emitted when a gamepad is unplugged
@@ -21,7 +21,7 @@ public class LibGamepad.GamepadMonitor : Object {
 	 * @param  guid          The guid of the unplugged gamepad
 	 * @param  name          The name of the unplugged gamepad
 	 */
-	public signal void on_unplug (string identifier, string guid, string? name);
+	public signal void gamepad_unplugged (string identifier, string guid, string? name);
 
 	public delegate void ForeachGamepadCallback(Gamepad g);
 
@@ -40,8 +40,8 @@ public class LibGamepad.GamepadMonitor : Object {
 
 		gm = new LinuxRawGamepadMonitor ();
 
-		gm.on_plugin.connect (on_raw_plugin);
-		gm.on_unplug.connect (on_raw_unplug);
+		gm.gamepad_plugged.connect (on_raw_plugin);
+		gm.gamepad_unplugged.connect (on_raw_unplug);
 
 		string guid;
 		string identifier;
@@ -84,7 +84,7 @@ public class LibGamepad.GamepadMonitor : Object {
 
 	private void on_raw_plugin (RawGamepad raw_gamepad) {
 		add_gamepad (raw_gamepad);
-		on_plugin (new Gamepad (raw_gamepad));
+		gamepad_plugged (new Gamepad (raw_gamepad));
 	}
 
 	private void on_raw_unplug (string identifier) {
@@ -92,6 +92,6 @@ public class LibGamepad.GamepadMonitor : Object {
 		if (raw_gamepad == null) return;
 		ngamepads--;
 		guid_to_raw_name.remove (raw_gamepad.guid.to_string ());
-		on_unplug (raw_gamepad.identifier, raw_gamepad.guid, Mappings.get_name (raw_gamepad.guid));
+		gamepad_unplugged (raw_gamepad.identifier, raw_gamepad.guid, Mappings.get_name (raw_gamepad.guid));
 	}
 }

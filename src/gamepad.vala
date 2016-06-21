@@ -28,7 +28,7 @@ public class LibGamepad.Gamepad : Object {
 	/**
 	 * Emitted when the gamepad is unplugged
 	 */
-	public signal void unplug ();
+	public signal void unplugged ();
 
 
 	/**
@@ -81,7 +81,7 @@ public class LibGamepad.Gamepad : Object {
 		raw_gamepad.button_event.connect (on_raw_button_event);
 		raw_gamepad.axis_event.connect (on_raw_axis_event);
 		raw_gamepad.hat_event.connect (on_raw_hat_event);
-		raw_gamepad.unplug.connect (() => unplug ());
+		raw_gamepad.unplugged.connect (() => unplugged ());
 	}
 
 	private void on_raw_button_event (int button, bool value) {

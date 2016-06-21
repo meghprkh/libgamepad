@@ -32,7 +32,7 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 		gudev_client.uevent.connect((action, gudev_dev) => {
 			if (action == "remove" && gudev_dev.get_device_file () == file_name) {
 				remove_event_source();
-				unplug();
+				unplugged();
 			}
 		});
 

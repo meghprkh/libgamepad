@@ -34,7 +34,7 @@ public interface LibGamepad.RawGamepad : Object {
 	/**
 	 * Emitted when the gamepad is unplugged
 	 */
-	public abstract signal void unplug ();
+	public abstract signal void unplugged ();
 
 	public abstract string identifier { get; protected set; }
 	public abstract string name { get; protected set; }
