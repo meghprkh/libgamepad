@@ -28,7 +28,27 @@ public class LibGamepad.Mappings {
 		init_if_not ();
 
 		var f = File.new_for_path(file_name);
-		var ds = new DataInputStream (f.read());
+		add_from_input_stream (f.read());
+	}
+
+	/**
+	 * Adds mappings from a resource path
+	 * @param path          The path
+	 */
+	public static void add_from_resource (string path) throws IOError {
+		init_if_not ();
+
+		add_from_input_stream (resources_open_stream (path, ResourceLookupFlags.NONE));
+	}
+
+	/**
+	 * Adds mappings from an InputStream
+	 * @param input_stream          The input stream
+	 */
+	public static void add_from_input_stream (InputStream input_stream) {
+		init_if_not ();
+
+		var ds = new DataInputStream (input_stream);
 		var str = ds.read_line();
 		while (str != null) {
 			add_mapping(str);
