@@ -10,39 +10,47 @@ private class LibGamepad.Hat : Object {
  * The client interfaces with this class primarily
  */
 public class LibGamepad.Gamepad : Object {
+
 	/**
 	 * Emitted when a button is pressed/released
 	 * @param  button        The button pressed
 	 * @param  value         True if pressed, False if released
 	 */
 	public signal void button_event (StandardGamepadButton button, bool value);
+
 	/**
 	 * Emitted when an axis's value changes
 	 * @param  axis          The axis number from 0 to naxes
 	 * @param  value         The value of the axis ranging from -1 to 1
 	 */
 	public signal void axis_event (StandardGamepadAxis axis, double value);
+
 	/**
 	 * Emitted when the gamepad is unplugged
 	 */
 	public signal void unplug ();
 
+
 	/**
 	 * The raw name reported by the driver
 	 */
 	public string? raw_name { get; private set; }
+
 	/**
 	 * The guid
 	 */
 	public string? guid { get; private set; }
+
 	/**
 	 * The name present in our database
 	 */
 	public string? name { get; private set; }
+
 	/**
 	 * The raw gamepad behind this gamepad
 	 */
 	public RawGamepad raw_gamepad { get; private set; }
+
 	/**
 	 * Whether this gamepad is mapped
 	 */

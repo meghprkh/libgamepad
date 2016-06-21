@@ -12,6 +12,7 @@ public interface LibGamepad.RawGamepadMonitor : Object {
 	 * @param   raw_gamepad   The raw gamepad
 	 */
 	public abstract signal void on_plugin (RawGamepad raw_gamepad);
+
 	/**
 	 * This signal should be emitted when a gamepad is unplugged
 	 *
@@ -23,6 +24,7 @@ public interface LibGamepad.RawGamepadMonitor : Object {
 	public abstract signal void on_unplug (string identifier);
 
 	public delegate void ForeachGamepadCallback (RawGamepad raw_gamepad);
+
 	/**
 	 * This function allows to iterate over all gamepads
 	 * @param   cb            The callback

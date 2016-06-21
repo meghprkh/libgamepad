@@ -15,12 +15,14 @@ public interface LibGamepad.RawGamepad : Object {
 	 * @param  value         True if pressed, False if released
 	 */
 	public abstract signal void button_event (int code, bool value);
+
 	/**
 	 * Emitted when an axis's value changes
 	 * @param  axis          The axis number from 0 to naxes
 	 * @param  value         The value of the axis ranging from -1 to 1
 	 */
 	public abstract signal void axis_event (int axis, double value);
+
 	/**
 	 * Emitted when a hat's axis's value changes
 	 * @param  hat           The hat number from 0 to
@@ -28,6 +30,7 @@ public interface LibGamepad.RawGamepad : Object {
 	 * @param  value         The value of the axis ranging from -1 to 1
 	 */
 	public abstract signal void hat_event (int hat, int axis, int value);
+
 	/**
 	 * Emitted when the gamepad is unplugged
 	 */
@@ -37,14 +40,17 @@ public interface LibGamepad.RawGamepad : Object {
 	public abstract string name { get; protected set; }
 	public abstract string guid { get; protected set; }
 
+
 	/**
 	 * Number of axes of the gamepad
 	 */
 	public abstract uint8 naxes { get; protected set; default = 0; }
+
 	/**
 	 * Number of buttons of the gamepad
 	 */
 	public abstract uint8 nbuttons { get; protected set; default = 0; }
+
 	/**
 	 * Number of hats of the gamepad`
 	 */

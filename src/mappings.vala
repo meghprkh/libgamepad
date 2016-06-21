@@ -17,6 +17,7 @@ public class LibGamepad.Mappings {
 		}
 	}
 
+
 	/**
 	 * Adds mappings from a file
 	 * @param file_name          The file name
@@ -33,6 +34,7 @@ public class LibGamepad.Mappings {
 		}
 	}
 
+
 	/**
 	 * Adds a mapping from a string (only one gamepad)
 	 */
@@ -48,6 +50,7 @@ public class LibGamepad.Mappings {
 		}
 	}
 
+
 	/**
 	 * Gets the name of a gamepad from the database
 	 * @param  guid          The guid of the wanted gamepad
@@ -57,6 +60,7 @@ public class LibGamepad.Mappings {
 		init_if_not ();
 		return names.get(guid);
 	}
+
 
 	/**
 	 * Gets the current mapping from the databse

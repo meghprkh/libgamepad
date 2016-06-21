@@ -8,11 +8,13 @@ public class LibGamepad.GamepadMonitor : Object {
 	 * The number of plugged in gamepads
 	 */
 	public static uint ngamepads { get; private set; default = 0; }
+
 	/**
 	 * Emitted when a gamepad is plugged in
 	 * @param  g    The gamepad
 	 */
 	public signal void on_plugin (Gamepad g);
+
 	/**
 	 * Emitted when a gamepad is unplugged
 	 * @param  identifier    The identifier of the unplugged gamepad
@@ -22,6 +24,7 @@ public class LibGamepad.GamepadMonitor : Object {
 	public signal void on_unplug (string identifier, string guid, string? name);
 
 	public delegate void ForeachGamepadCallback(Gamepad g);
+
 	/**
 	 * This function allows to iterate over all gamepads
 	 * @param    cb          The callback
@@ -47,6 +50,7 @@ public class LibGamepad.GamepadMonitor : Object {
 		});
 
 	}
+
 
 	/**
 	 * This static function returns a raw gamepad given a guid. It can be used
