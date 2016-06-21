@@ -85,6 +85,11 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 		}
 	}
 
+	~LinuxRawGamepad () {
+		Posix.close (fd);
+		remove_event_source ();
+	}
+	
 	private bool poll_events () {
 		while (dev.has_event_pending() > 0)
 			on_event();
@@ -137,11 +142,6 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 				break;
 			}
 		}
-	}
-
-	~LinuxRawGamepad () {
-		Posix.close (fd);
-		remove_event_source ();
 	}
 
 	private void remove_event_source () {

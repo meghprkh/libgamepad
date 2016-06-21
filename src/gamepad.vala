@@ -89,12 +89,12 @@ public class LibGamepad.Gamepad : Object {
 			return;
 
 		switch(buttons[button]) {
-			case InputType.AXIS:
-				axis_event((StandardGamepadAxis) buttons_value[button], (double) value);
-				break;
-			case InputType.BUTTON:
-				button_event((StandardGamepadButton) buttons_value[button], value);
-				break;
+		case InputType.AXIS:
+			axis_event((StandardGamepadAxis) buttons_value[button], (double) value);
+			break;
+		case InputType.BUTTON:
+			button_event((StandardGamepadButton) buttons_value[button], value);
+			break;
 		}
 	}
 
@@ -103,12 +103,12 @@ public class LibGamepad.Gamepad : Object {
 			return;
 
 		switch(axes[axis]) {
-			case InputType.AXIS:
-				axis_event((StandardGamepadAxis) axes_value[axis], value);
-				break;
-			case InputType.BUTTON:
-				button_event((StandardGamepadButton) axes_value[axis], (bool) value);
-				break;
+		case InputType.AXIS:
+			axis_event((StandardGamepadAxis) axes_value[axis], value);
+			break;
+		case InputType.BUTTON:
+			button_event((StandardGamepadButton) axes_value[axis], (bool) value);
+			break;
 		}
 	}
 
@@ -125,12 +125,12 @@ public class LibGamepad.Gamepad : Object {
 		dpad.axisval[axis] = value;
 		value = value.abs();
 		switch(dpad.types[dpadp]) {
-			case InputType.AXIS:
-				axis_event((StandardGamepadAxis) dpad.values[dpadp], value);
-				break;
-			case InputType.BUTTON:
-				button_event((StandardGamepadButton) dpad.values[dpadp], (bool) value);
-				break;
+		case InputType.AXIS:
+			axis_event((StandardGamepadAxis) dpad.values[dpadp], value);
+			break;
+		case InputType.BUTTON:
+			button_event((StandardGamepadButton) dpad.values[dpadp], (bool) value);
+			break;
 		}
 	}
 
