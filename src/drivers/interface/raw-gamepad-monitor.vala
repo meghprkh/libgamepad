@@ -23,11 +23,11 @@ public interface LibGamepad.RawGamepadMonitor : Object {
 	 */
 	public abstract signal void gamepad_unplugged (string identifier);
 
-	public delegate void ForeachGamepadCallback (RawGamepad raw_gamepad);
+	public delegate void RawGamepadCallback (RawGamepad raw_gamepad);
 
 	/**
 	 * This function allows to iterate over all gamepads
 	 * @param   cb            The callback
 	 */
-	public abstract void foreach_gamepad (ForeachGamepadCallback cb);
+	public abstract void foreach_gamepad (RawGamepadCallback cb);
 }

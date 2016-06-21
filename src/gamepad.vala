@@ -62,8 +62,8 @@ public class LibGamepad.Gamepad : Object {
 	private int[] axes_value;
 	private Hat[] hats;
 
-	public Gamepad (RawGamepad rg) throws FileError {
-		raw_gamepad = rg;
+	public Gamepad (RawGamepad raw_gamepad) throws FileError {
+		this.raw_gamepad = raw_gamepad;
 		mapped = false;
 		raw_name = raw_gamepad.name;
 		guid = raw_gamepad.guid;
@@ -85,7 +85,9 @@ public class LibGamepad.Gamepad : Object {
 	}
 
 	private void on_raw_button_event (int button, bool value) {
-		if (!mapped) return;
+		if (!mapped)
+			return;
+
 		switch(buttons[button]) {
 			case InputType.AXIS:
 				axis_event((StandardGamepadAxis) buttons_value[button], (double) value);
@@ -97,7 +99,9 @@ public class LibGamepad.Gamepad : Object {
 	}
 
 	private void on_raw_axis_event (int axis, double value) {
-		if (!mapped) return;
+		if (!mapped)
+			return;
+
 		switch(axes[axis]) {
 			case InputType.AXIS:
 				axis_event((StandardGamepadAxis) axes_value[axis], value);
@@ -109,11 +113,15 @@ public class LibGamepad.Gamepad : Object {
 	}
 
 	private void on_raw_hat_event (int hati, int axis, int value) {
-		if (!mapped) return;
+		if (!mapped)
+			return;
+
 		int hatp;
 		var hat = hats[hati];
-		if (value == 0) hatp = (hat.axisval[axis] + axis + 4) % 4;
-		else hatp = (value + axis + 4) % 4;
+		if (value == 0)
+			hatp = (hat.axisval[axis] + axis + 4) % 4;
+		else
+			hatp = (value + axis + 4) % 4;
 		hat.axisval[axis] = value;
 		value = value.abs();
 		switch(hat.types[hatp]) {
@@ -127,7 +135,9 @@ public class LibGamepad.Gamepad : Object {
 	}
 
 	private void add_mapping (string? mappingstring) {
-		if (mappingstring == null || mappingstring == "") return;
+		if (mappingstring == null || mappingstring == "")
+			return;
+
 		mapped = true;
 		var mappings = mappingstring.split(",");
 		foreach (var mapping in mappings) {
@@ -135,7 +145,8 @@ public class LibGamepad.Gamepad : Object {
 				var str = mapping.split(":")[0];
 				var real = mapping.split(":")[1];
 				var type = MappingHelpers.map_type(str);
-				if (type == InputType.INVALID) continue;
+				if (type == InputType.INVALID)
+					continue;
 				var value = MappingHelpers.map_value(str);
 				switch (real[0]) {
 				case 'h':
@@ -143,7 +154,10 @@ public class LibGamepad.Gamepad : Object {
 					var hati = int.parse(hatarr[0]);
 					var hatp2pow = int.parse(hatarr[1]);
 					var hatp = 0;
-					while (hatp2pow > 1) {hatp2pow >>= 1; hatp++;}
+					while (hatp2pow > 1) {
+						hatp2pow >>= 1;
+						hatp++;
+					}
 					hats[hati].types[hatp] = type;
 					hats[hati].values[hatp] = value;
 					break;

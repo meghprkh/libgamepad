@@ -11,8 +11,10 @@ public class LibGamepad.Mappings {
 	private static void init_if_not () {
 		if (inited == null || inited == false) {
 			inited = true;
-			if (names == null) names = new HashTable<string, string> (str_hash, str_equal);
-			if (mappings == null) mappings = new HashTable<string, string> (str_hash, str_equal);
+			if (names == null)
+				names = new HashTable<string, string> (str_hash, str_equal);
+			if (mappings == null)
+				mappings = new HashTable<string, string> (str_hash, str_equal);
 			Mappings.add_from_file (@"$(LibGamepadConstants.PKGDATADIR)/gamecontrollerdb.txt");
 		}
 	}
@@ -41,7 +43,8 @@ public class LibGamepad.Mappings {
 	public static void add_mapping (string str) {
 		init_if_not ();
 
-		if (str == "" || str[0] == '#') return;
+		if (str == "" || str[0] == '#')
+			return;
 
 		if (str.index_of ("platform") == -1 || str.index_of ("platform:Linux") != -1) {
 			var split = str.split(",", 3);

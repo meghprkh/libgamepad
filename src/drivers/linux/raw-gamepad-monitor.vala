@@ -6,10 +6,11 @@ private class LibGamepad.LinuxRawGamepadMonitor : Object, RawGamepadMonitor {
 		client.uevent.connect(udev_client_callback);
 	}
 
-	public delegate void ForeachGamepadCallback (RawGamepad raw_gamepad);
-	public void foreach_gamepad (ForeachGamepadCallback cb) {
+	public delegate void RawGamepadCallback (RawGamepad raw_gamepad);
+	public void foreach_gamepad (RawGamepadCallback cb) {
 		client.query_by_subsystem("input").foreach((dev) => {
-			if (dev.get_device_file() == null) return;
+			if (dev.get_device_file () == null)
+				return;
 			var identifier = dev.get_device_file();
 			if ((dev.has_property("ID_INPUT_JOYSTICK") && dev.get_property("ID_INPUT_JOYSTICK") == "1") ||
 				(dev.has_property(".INPUT_CLASS") && dev.get_property(".INPUT_CLASS") == "joystick")) {
@@ -25,7 +26,8 @@ private class LibGamepad.LinuxRawGamepadMonitor : Object, RawGamepadMonitor {
 	}
 
 	private void udev_client_callback (string action, GUdev.Device dev) {
-		if (dev.get_device_file() == null) return;
+		if (dev.get_device_file () == null)
+			return;
 		var identifier = dev.get_device_file();
 		if ((dev.has_property("ID_INPUT_JOYSTICK") && dev.get_property("ID_INPUT_JOYSTICK") == "1") ||
 			(dev.has_property(".INPUT_CLASS") && dev.get_property(".INPUT_CLASS") == "joystick")) {

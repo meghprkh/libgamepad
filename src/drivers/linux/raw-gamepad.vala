@@ -41,7 +41,7 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 
 		// Poll the events in the default main loop
 		var channel = new IOChannel.unix_new (fd);
-		event_source_id = channel.add_watch (IOCondition.IN, () => { return poll_events (); });
+		event_source_id = channel.add_watch (IOCondition.IN, poll_events);
 
 		// Initialize hats, buttons and axes
 		uint i;
@@ -86,7 +86,8 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 	}
 
 	private bool poll_events () {
-		while (dev.has_event_pending() > 0) on_event();
+		while (dev.has_event_pending() > 0)
+			on_event();
 
 		return true;
 	}
