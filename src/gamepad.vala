@@ -1,4 +1,4 @@
-private class LibGamepad.Hat : Object {
+private class LibGamepad.Dpad : Object {
 	public InputType types[4];
 	public int values[4];
 	public int axisval[2];
@@ -20,7 +20,7 @@ public class LibGamepad.Gamepad : Object {
 
 	/**
 	 * Emitted when an axis's value changes
-	 * @param  axis          The axis number from 0 to naxes
+	 * @param  axis          The axis number from 0 to axes_number
 	 * @param  value         The value of the axis ranging from -1 to 1
 	 */
 	public signal void axis_event (StandardGamepadAxis axis, double value);
@@ -60,7 +60,7 @@ public class LibGamepad.Gamepad : Object {
 	private int[] buttons_value;
 	private InputType[] axes;
 	private int[] axes_value;
-	private Hat[] hats;
+	private Dpad[] dpads;
 
 	public Gamepad (RawGamepad raw_gamepad) throws FileError {
 		this.raw_gamepad = raw_gamepad;
@@ -68,19 +68,19 @@ public class LibGamepad.Gamepad : Object {
 		raw_name = raw_gamepad.name;
 		guid = raw_gamepad.guid;
 		name = Mappings.get_name (guid) ?? raw_name;
-		buttons.resize (raw_gamepad.nbuttons);
-		buttons_value.resize (raw_gamepad.nbuttons);
-		axes.resize (raw_gamepad.naxes);
-		axes_value.resize (raw_gamepad.naxes);
-		hats.resize (raw_gamepad.nhats);
-		for (var i = 0; i < raw_gamepad.nhats; i++) {
-			hats[i] = new Hat();
-			hats[i].axisval[0] = hats[i].axisval[1] = 0;
+		buttons.resize (raw_gamepad.buttons_number);
+		buttons_value.resize (raw_gamepad.buttons_number);
+		axes.resize (raw_gamepad.axes_number);
+		axes_value.resize (raw_gamepad.axes_number);
+		dpads.resize (raw_gamepad.dpads_number);
+		for (var i = 0; i < raw_gamepad.dpads_number; i++) {
+			dpads[i] = new Dpad();
+			dpads[i].axisval[0] = dpads[i].axisval[1] = 0;
 		}
 		add_mapping (Mappings.get_mapping(guid));
 		raw_gamepad.button_event.connect (on_raw_button_event);
 		raw_gamepad.axis_event.connect (on_raw_axis_event);
-		raw_gamepad.hat_event.connect (on_raw_hat_event);
+		raw_gamepad.dpad_event.connect (on_raw_hat_event);
 		raw_gamepad.unplugged.connect (() => unplugged ());
 	}
 
@@ -112,24 +112,24 @@ public class LibGamepad.Gamepad : Object {
 		}
 	}
 
-	private void on_raw_hat_event (int hati, int axis, int value) {
+	private void on_raw_hat_event (int dpadi, int axis, int value) {
 		if (!mapped)
 			return;
 
-		int hatp;
-		var hat = hats[hati];
+		int dpadp;
+		var dpad = dpads[dpadi];
 		if (value == 0)
-			hatp = (hat.axisval[axis] + axis + 4) % 4;
+			dpadp = (dpad.axisval[axis] + axis + 4) % 4;
 		else
-			hatp = (value + axis + 4) % 4;
-		hat.axisval[axis] = value;
+			dpadp = (value + axis + 4) % 4;
+		dpad.axisval[axis] = value;
 		value = value.abs();
-		switch(hat.types[hatp]) {
+		switch(dpad.types[dpadp]) {
 			case InputType.AXIS:
-				axis_event((StandardGamepadAxis) hat.values[hatp], value);
+				axis_event((StandardGamepadAxis) dpad.values[dpadp], value);
 				break;
 			case InputType.BUTTON:
-				button_event((StandardGamepadButton) hat.values[hatp], (bool) value);
+				button_event((StandardGamepadButton) dpad.values[dpadp], (bool) value);
 				break;
 		}
 	}
@@ -151,15 +151,15 @@ public class LibGamepad.Gamepad : Object {
 				switch (real[0]) {
 				case 'h':
 					var hatarr = real[1:real.length].split(".");
-					var hati = int.parse(hatarr[0]);
+					var dpadi = int.parse(hatarr[0]);
 					var hatp2pow = int.parse(hatarr[1]);
-					var hatp = 0;
+					var dpadp = 0;
 					while (hatp2pow > 1) {
 						hatp2pow >>= 1;
-						hatp++;
+						dpadp++;
 					}
-					hats[hati].types[hatp] = type;
-					hats[hati].values[hatp] = value;
+					dpads[dpadi].types[dpadp] = type;
+					dpads[dpadi].values[dpadp] = value;
 					break;
 				case 'b':
 					int button = int.parse(real[1:real.length]);
