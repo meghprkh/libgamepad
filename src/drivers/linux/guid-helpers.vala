@@ -1,13 +1,13 @@
 private class LibGamepad.LinuxGuidHelpers : Object {
 	public static string from_dev (Libevdev.Evdev dev) {
 		uint16 guid[8];
-		guid[0] = dev.id_bustype.to_little_endian ();
+		guid[0] = (uint16) dev.id_bustype.to_little_endian ();
 		guid[1] = 0;
-		guid[2] = dev.id_vendor.to_little_endian ();
+		guid[2] = (uint16) dev.id_vendor.to_little_endian ();
 		guid[3] = 0;
-		guid[4] = dev.id_product.to_little_endian ();
+		guid[4] = (uint16) dev.id_product.to_little_endian ();
 		guid[5] = 0;
-		guid[6] = dev.id_version.to_little_endian ();
+		guid[6] = (uint16) dev.id_version.to_little_endian ();
 		guid[7] = 0;
 		return uint16s_to_hex_string (guid);
 	}

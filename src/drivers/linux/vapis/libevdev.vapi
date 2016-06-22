@@ -21,10 +21,10 @@ namespace Libevdev {
 
 		public string name { get; set; }
 
-		public int16 id_bustype { get; set; }
-		public int16 id_vendor { get; set; }
-		public int16 id_product { get; set; }
-		public int16 id_version { get; set; }
+		public int id_bustype { get; set; }
+		public int id_vendor { get; set; }
+		public int id_product { get; set; }
+		public int id_version { get; set; }
 
 		public unowned Linux.Input.AbsInfo? get_abs_info (uint code);
 		public bool has_event_code (uint type, uint code);
