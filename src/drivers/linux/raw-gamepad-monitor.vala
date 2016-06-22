@@ -1,37 +1,39 @@
 private class LibGamepad.LinuxRawGamepadMonitor : Object, RawGamepadMonitor {
 	private GUdev.Client client;
+	public delegate void RawGamepadCallback (RawGamepad raw_gamepad);
 
 	public LinuxRawGamepadMonitor () {
-		client = new GUdev.Client({"input"});
-		client.uevent.connect(udev_client_callback);
+		client = new GUdev.Client ({"input"});
+		client.uevent.connect (handle_udev_client_callback);
 	}
 
-	public delegate void RawGamepadCallback (RawGamepad raw_gamepad);
-	public void foreach_gamepad (RawGamepadCallback cb) {
-		client.query_by_subsystem("input").foreach((dev) => {
+	public void foreach_gamepad (RawGamepadCallback callback) {
+		client.query_by_subsystem ("input").foreach ((dev) => {
 			if (dev.get_device_file () == null)
 				return;
-			var identifier = dev.get_device_file();
-			if ((dev.has_property("ID_INPUT_JOYSTICK") && dev.get_property("ID_INPUT_JOYSTICK") == "1") ||
-				(dev.has_property(".INPUT_CLASS") && dev.get_property(".INPUT_CLASS") == "joystick")) {
+			var identifier = dev.get_device_file ();
+			if ((dev.has_property ("ID_INPUT_JOYSTICK") && dev.get_property ("ID_INPUT_JOYSTICK") == "1") ||
+				(dev.has_property (".INPUT_CLASS") && dev.get_property (".INPUT_CLASS") == "joystick")) {
 				RawGamepad raw_gamepad;
 				try {
 					raw_gamepad = new LinuxRawGamepad (identifier);
 				} catch (FileError err) {
 					return;
 				}
-				cb (raw_gamepad);
+				callback (raw_gamepad);
 			}
 		});
 	}
 
-	private void udev_client_callback (string action, GUdev.Device dev) {
+	private void handle_udev_client_callback (string action, GUdev.Device dev) {
 		if (dev.get_device_file () == null)
 			return;
-		var identifier = dev.get_device_file();
-		if ((dev.has_property("ID_INPUT_JOYSTICK") && dev.get_property("ID_INPUT_JOYSTICK") == "1") ||
-			(dev.has_property(".INPUT_CLASS") && dev.get_property(".INPUT_CLASS") == "joystick")) {
-			if (action == "add") {
+
+		var identifier = dev.get_device_file ();
+		if ((dev.has_property ("ID_INPUT_JOYSTICK") && dev.get_property ("ID_INPUT_JOYSTICK") == "1") ||
+			(dev.has_property (".INPUT_CLASS") && dev.get_property (".INPUT_CLASS") == "joystick")) {
+			switch (action) {
+			case "add":
 				RawGamepad raw_gamepad;
 				try {
 					raw_gamepad = new LinuxRawGamepad (identifier);
@@ -39,8 +41,10 @@ private class LibGamepad.LinuxRawGamepadMonitor : Object, RawGamepadMonitor {
 					return;
 				}
 				gamepad_plugged (raw_gamepad);
-			} else if (action == "remove") {
+				break;
+			case "remove":
 				gamepad_unplugged (identifier);
+				break;
 			}
 		}
 	}

@@ -9,12 +9,12 @@ namespace LibGamepad {
 		var builder = new StringBuilder ();
 		for (var i = 0; i < GUID_LENGTH; i++) {
 			uint8 c = (uint8) data[i];
-			builder.append_unichar(k_rgchHexToASCII[c >> 4]);
-			builder.append_unichar(k_rgchHexToASCII[c & 0x0F]);
+			builder.append_unichar (k_rgchHexToASCII[c >> 4]);
+			builder.append_unichar (k_rgchHexToASCII[c & 0x0F]);
 
 			c = (uint8) (data[i] >> 8);
-			builder.append_unichar(k_rgchHexToASCII[c >> 4]);
-			builder.append_unichar(k_rgchHexToASCII[c & 0x0F]);
+			builder.append_unichar (k_rgchHexToASCII[c >> 4]);
+			builder.append_unichar (k_rgchHexToASCII[c & 0x0F]);
 		}
 		return builder.str;
 	}

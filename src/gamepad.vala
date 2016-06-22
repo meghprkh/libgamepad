@@ -74,10 +74,10 @@ public class LibGamepad.Gamepad : Object {
 		axes_value.resize (raw_gamepad.axes_number);
 		dpads.resize (raw_gamepad.dpads_number);
 		for (var i = 0; i < raw_gamepad.dpads_number; i++) {
-			dpads[i] = new Dpad();
+			dpads[i] = new Dpad ();
 			dpads[i].axisval[0] = dpads[i].axisval[1] = 0;
 		}
-		add_mapping (Mappings.get_mapping(guid));
+		add_mapping (Mappings.get_mapping (guid));
 		raw_gamepad.button_event.connect (on_raw_button_event);
 		raw_gamepad.axis_event.connect (on_raw_axis_event);
 		raw_gamepad.dpad_event.connect (on_raw_hat_event);
@@ -88,12 +88,12 @@ public class LibGamepad.Gamepad : Object {
 		if (!mapped)
 			return;
 
-		switch(buttons[button]) {
+		switch (buttons[button]) {
 		case InputType.AXIS:
-			axis_event((StandardGamepadAxis) buttons_value[button], (double) value);
+			axis_event ((StandardGamepadAxis) buttons_value[button], (double) value);
 			break;
 		case InputType.BUTTON:
-			button_event((StandardGamepadButton) buttons_value[button], value);
+			button_event ((StandardGamepadButton) buttons_value[button], value);
 			break;
 		}
 	}
@@ -102,12 +102,12 @@ public class LibGamepad.Gamepad : Object {
 		if (!mapped)
 			return;
 
-		switch(axes[axis]) {
+		switch (axes[axis]) {
 		case InputType.AXIS:
-			axis_event((StandardGamepadAxis) axes_value[axis], value);
+			axis_event ((StandardGamepadAxis) axes_value[axis], value);
 			break;
 		case InputType.BUTTON:
-			button_event((StandardGamepadButton) axes_value[axis], (bool) value);
+			button_event ((StandardGamepadButton) axes_value[axis], (bool) value);
 			break;
 		}
 	}
@@ -123,13 +123,13 @@ public class LibGamepad.Gamepad : Object {
 		else
 			dpadp = (value + axis + 4) % 4;
 		dpad.axisval[axis] = value;
-		value = value.abs();
-		switch(dpad.types[dpadp]) {
+		value = value.abs ();
+		switch (dpad.types[dpadp]) {
 		case InputType.AXIS:
-			axis_event((StandardGamepadAxis) dpad.values[dpadp], value);
+			axis_event ((StandardGamepadAxis) dpad.values[dpadp], value);
 			break;
 		case InputType.BUTTON:
-			button_event((StandardGamepadButton) dpad.values[dpadp], (bool) value);
+			button_event ((StandardGamepadButton) dpad.values[dpadp], (bool) value);
 			break;
 		}
 	}
@@ -139,21 +139,21 @@ public class LibGamepad.Gamepad : Object {
 			return;
 
 		mapped = true;
-		var mappings = mappingstring.split(",");
+		var mappings = mappingstring.split (",");
 		foreach (var mapping in mappings) {
-			if (mapping.split(":").length == 2) {
-				var str = mapping.split(":")[0];
-				var real = mapping.split(":")[1];
-				var type = MappingHelpers.map_type(str);
+			if (mapping.split (":").length == 2) {
+				var str = mapping.split (":")[0];
+				var real = mapping.split (":")[1];
+				var type = MappingHelpers.map_type (str);
 				if (type == InputType.INVALID)
 					continue;
-				var value = MappingHelpers.map_value(str);
+				var value = MappingHelpers.map_value (str);
 				switch (real[0]) {
 				case 'h':
-					var hatarr = real[1:real.length].split(".");
-					var dpadi = int.parse(hatarr[0]);
-					var hatp2pow = int.parse(hatarr[1]);
-					var dpadp = 0;
+					var hatarr = real[1:real.length].split (".");
+					var dpadi = int.parse (hatarr[0]);
+					var hatp2pow = int.parse (hatarr[1]);
+					int dpadp = 0;
 					while (hatp2pow > 1) {
 						hatp2pow >>= 1;
 						dpadp++;
@@ -162,12 +162,12 @@ public class LibGamepad.Gamepad : Object {
 					dpads[dpadi].values[dpadp] = value;
 					break;
 				case 'b':
-					int button = int.parse(real[1:real.length]);
+					var button = int.parse (real[1:real.length]);
 					buttons[button] = type;
 					buttons_value[button] = value;
 					break;
 				case 'a':
-					int axis = int.parse(real[1:real.length]);
+					var axis = int.parse (real[1:real.length]);
 					axes[axis] = type;
 					axes_value[axis] = value;
 					break;

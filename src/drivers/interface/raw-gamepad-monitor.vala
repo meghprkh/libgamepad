@@ -27,7 +27,7 @@ public interface LibGamepad.RawGamepadMonitor : Object {
 
 	/**
 	 * This function allows to iterate over all gamepads
-	 * @param   cb            The callback
+	 * @param   callback            The callback
 	 */
-	public abstract void foreach_gamepad (RawGamepadCallback cb);
+	public abstract void foreach_gamepad (RawGamepadCallback callback);
 }

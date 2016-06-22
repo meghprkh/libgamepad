@@ -27,8 +27,8 @@ public class LibGamepad.Mappings {
 	public static void add_from_file (string file_name) throws IOError {
 		init_if_not ();
 
-		var f = File.new_for_path(file_name);
-		add_from_input_stream (f.read());
+		var file = File.new_for_path (file_name);
+		add_from_input_stream (file.read ());
 	}
 
 	/**
@@ -48,11 +48,11 @@ public class LibGamepad.Mappings {
 	public static void add_from_input_stream (InputStream input_stream) {
 		init_if_not ();
 
-		var ds = new DataInputStream (input_stream);
-		var str = ds.read_line();
-		while (str != null) {
-			add_mapping(str);
-			str = ds.read_line ();
+		var data_stream = new DataInputStream (input_stream);
+		var mappingstr = data_stream.read_line ();
+		while (mappingstr != null) {
+			add_mapping (mappingstr);
+			mappingstr = data_stream.read_line ();
 		}
 	}
 
@@ -60,16 +60,16 @@ public class LibGamepad.Mappings {
 	/**
 	 * Adds a mapping from a string (only one gamepad)
 	 */
-	public static void add_mapping (string str) {
+	public static void add_mapping (string mappingstr) {
 		init_if_not ();
 
-		if (str == "" || str[0] == '#')
+		if (mappingstr == "" || mappingstr[0] == '#')
 			return;
 
-		if (str.index_of ("platform") == -1 || str.index_of ("platform:Linux") != -1) {
-			var split = str.split(",", 3);
-			names.replace(split[0], split[1]);
-			mappings.replace(split[0], split[2]);
+		if (mappingstr.index_of ("platform") == -1 || mappingstr.index_of ("platform:Linux") != -1) {
+			var split = mappingstr.split (",", 3);
+			names.replace (split[0], split[1]);
+			mappings.replace (split[0], split[2]);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class LibGamepad.Mappings {
 	 */
 	public static string? get_name (string guid) {
 		init_if_not ();
-		return names.get(guid);
+		return names.get (guid);
 	}
 
 
@@ -92,6 +92,6 @@ public class LibGamepad.Mappings {
 	 */
 	public static string? get_mapping (string guid) {
 		init_if_not ();
-		return mappings.get(guid);
+		return mappings.get (guid);
 	}
 }

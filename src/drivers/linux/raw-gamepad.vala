@@ -5,7 +5,26 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 
 	public uint8 axes_number { get; protected set; default = 0; }
 	public uint8 buttons_number { get; protected set; default = 0; }
-	public uint8 dpads_number { get; protected set; default = 0; }
+	private int _dpads_number = -1;
+	public uint8 dpads_number {
+		get {
+			if (_dpads_number != -1)
+				return (uint8) _dpads_number;
+
+			_dpads_number = 0;
+			for (var i = Linux.Input.ABS_HAT0X; i <= Linux.Input.ABS_HAT3Y; i += 2) {
+				if (dev.has_event_code (Linux.Input.EV_ABS, i) || dev.has_event_code (Linux.Input.EV_ABS, i+1)) {
+					Linux.Input.AbsInfo? absinfo = dev.get_abs_info (i);
+					if (absinfo == null)
+						continue;
+
+					_dpads_number++;
+				}
+			}
+			return (uint8) _dpads_number;
+		}
+		protected set {}
+	}
 
 	private int fd;
 	private GUdev.Client gudev_client;
@@ -21,66 +40,50 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 		fd = Posix.open (file_name, Posix.O_RDONLY | Posix.O_NONBLOCK);
 
 		if (fd < 0)
-			throw new FileError.FAILED (@"Unable to open file $file_name: $(Posix.strerror(Posix.errno))");
+			throw new FileError.FAILED (@"Unable to open file $file_name: $(Posix.strerror (Posix.errno))");
 
-		dev = new Libevdev.Evdev();
-		if (dev.set_fd(fd) < 0)
-			throw new FileError.FAILED ("Locha ho gaya o bhaiya locha ho gaya");
+		dev = new Libevdev.Evdev ();
+		if (dev.set_fd (fd) < 0)
+			throw new FileError.FAILED (@"Evdev is unable to open $file_name: $(Posix.strerror (Posix.errno))");
 
 		// Monitor the file for deletion
-		gudev_client = new GUdev.Client({"input"});
-		gudev_client.uevent.connect((action, gudev_dev) => {
-			if (action == "remove" && gudev_dev.get_device_file () == file_name) {
-				remove_event_source();
-				unplugged();
-			}
-		});
+		gudev_client = new GUdev.Client ({"input"});
+		gudev_client.uevent.connect (handle_gudev_event);
 
 		name = dev.name;
-		guid = LinuxGuidHelpers.from_dev(dev);
+		guid = LinuxGuidHelpers.from_dev (dev);
 
 		// Poll the events in the default main loop
 		var channel = new IOChannel.unix_new (fd);
 		event_source_id = channel.add_watch (IOCondition.IN, poll_events);
 
 		// Initialize dpads, buttons and axes
-		uint i;
-		for (i = Linux.Input.BTN_JOYSTICK; i < Linux.Input.KEY_MAX; ++i) {
-			if (dev.has_event_code(Linux.Input.EV_KEY, i)) {
+		for (var i = Linux.Input.BTN_JOYSTICK; i < Linux.Input.KEY_MAX; i++) {
+			if (dev.has_event_code (Linux.Input.EV_KEY, i)) {
 				key_map[i - Linux.Input.BTN_MISC] = buttons_number;
-				++buttons_number;
+				buttons_number++;
 			}
 		}
-		for (i = Linux.Input.BTN_MISC; i < Linux.Input.BTN_JOYSTICK; ++i) {
-			if (dev.has_event_code(Linux.Input.EV_KEY, i)) {
+		for (var i = Linux.Input.BTN_MISC; i < Linux.Input.BTN_JOYSTICK; i++) {
+			if (dev.has_event_code (Linux.Input.EV_KEY, i)) {
 				key_map[i - Linux.Input.BTN_MISC] = buttons_number;
-				++buttons_number;
+				buttons_number++;
 			}
 		}
 
 
 		// Get info about axes
-		for (i = 0; i < Linux.Input.ABS_MAX; ++i) {
+		for (var i = 0; i < Linux.Input.ABS_MAX; i++) {
 			/* Skip dpads */
 			if (i == Linux.Input.ABS_HAT0X) {
 				i = Linux.Input.ABS_HAT3Y;
 				continue;
 			}
-			if (dev.has_event_code(Linux.Input.EV_ABS, i)) {
-				Linux.Input.AbsInfo? absinfo = dev.get_abs_info(i);
+			if (dev.has_event_code (Linux.Input.EV_ABS, i)) {
+				var absinfo = dev.get_abs_info (i);
 				abs_map[i] = axes_number;
 				abs_info[axes_number] = absinfo;
-				++axes_number;
-			}
-		}
-
-		// Get info about dpads
-		for (i = Linux.Input.ABS_HAT0X; i <= Linux.Input.ABS_HAT3Y; i += 2) {
-			if (dev.has_event_code(Linux.Input.EV_ABS, i) || dev.has_event_code(Linux.Input.EV_ABS, i+1)) {
-				Linux.Input.AbsInfo? absinfo = dev.get_abs_info(i);
-				if (absinfo == null) continue;
-
-				++dpads_number;
+				axes_number++;
 			}
 		}
 	}
@@ -89,18 +92,18 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 		Posix.close (fd);
 		remove_event_source ();
 	}
-	
+
 	private bool poll_events () {
-		while (dev.has_event_pending() > 0)
-			on_event();
+		while (dev.has_event_pending () > 0)
+			handle_evdev_event ();
 
 		return true;
 	}
 
-	private void on_event () {
+	private void handle_evdev_event () {
 		int rc;
 		Linux.Input.Event ev;
-		rc = dev.next_event(Libevdev.ReadFlag.NORMAL, out ev);
+		rc = dev.next_event (Libevdev.ReadFlag.NORMAL, out ev);
 		if (rc == 0) {
 			int code = ev.code;
 			switch (ev.type) {
@@ -123,24 +126,19 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 					dpad_event (code / 2, code % 2, ev.value);
 					break;
 				default:
-					int axis = abs_map[code];
+					var axis = abs_map[code];
 					axis_event (axis, (double) ev.value / abs_info[axis].maximum);
 					break;
 				}
 				break;
-			case Linux.Input.EV_REL:
-				switch (code) {
-				case Linux.Input.REL_X:
-				case Linux.Input.REL_Y:
-					code -= Linux.Input.REL_X;
-					// TODO : ball events
-					print("Ball %d Axis %d Value %d\n", code / 2, code % 2, ev.value);
-					break;
-				default:
-					break;
-				}
-				break;
 			}
+		}
+	}
+
+	private void handle_gudev_event (string action, GUdev.Device gudev_dev) {
+		if (action == "remove" && gudev_dev.get_device_file () == identifier) {
+			remove_event_source ();
+			unplugged ();
 		}
 	}
 

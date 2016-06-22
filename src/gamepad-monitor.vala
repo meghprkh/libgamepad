@@ -23,20 +23,20 @@ public class LibGamepad.GamepadMonitor : Object {
 	 */
 	public signal void gamepad_unplugged (string identifier, string guid, string? name);
 
-	public delegate void GamepadCallback(Gamepad gamepad);
+	public delegate void GamepadCallback (Gamepad gamepad);
 
 	/**
 	 * This function allows to iterate over all gamepads
-	 * @param    cb          The callback
+	 * @param    callback          The callback
 	 */
-	public void foreach_gamepad (GamepadCallback cb) {
+	public void foreach_gamepad (GamepadCallback callback) {
 		identifier_to_raw_gamepad.foreach ((identifier, raw_gamepad) => {
-			cb (new Gamepad (raw_gamepad));
+			callback (new Gamepad (raw_gamepad));
 		});
 	}
 
-	public GamepadMonitor() {
-		init_static_if_not();
+	public GamepadMonitor () {
+		init_static_if_not ();
 
 		raw_gamepad_monitor = new LinuxRawGamepadMonitor ();
 
@@ -58,7 +58,7 @@ public class LibGamepad.GamepadMonitor : Object {
 	 * @param  identifier         The identifier of the raw gamepad that you want
 	 */
 	public static RawGamepad? get_raw_gamepad (string identifier) {
-		init_static_if_not();
+		init_static_if_not ();
 
 		if (identifier == null)
 			return null;

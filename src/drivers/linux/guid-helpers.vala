@@ -9,21 +9,21 @@ private class LibGamepad.LinuxGuidHelpers : Object {
 		guid[5] = 0;
 		guid[6] = dev.id_version.to_little_endian ();
 		guid[7] = 0;
-		return uint16s_to_hex_string(guid);
+		return uint16s_to_hex_string (guid);
 	}
 
 	public static string from_file (string file_name) throws FileError {
 		var fd = Posix.open (file_name, Posix.O_RDONLY | Posix.O_NONBLOCK);
 
 		if (fd < 0)
-			throw new FileError.FAILED (@"Unable to open file $file_name: $(Posix.strerror(Posix.errno))");
+			throw new FileError.FAILED (@"Unable to open file $file_name: $(Posix.strerror (Posix.errno))");
 
-		var dev = new Libevdev.Evdev();
-		if (dev.set_fd(fd) < 0)
-			throw new FileError.FAILED (@"Evdev error on opening file $file_name: $(Posix.strerror(Posix.errno))");
+		var dev = new Libevdev.Evdev ();
+		if (dev.set_fd (fd) < 0)
+			throw new FileError.FAILED (@"Evdev error on opening file $file_name: $(Posix.strerror (Posix.errno))");
 
-		string guid = from_dev (dev);
-		Posix.close(fd);
+		var guid = from_dev (dev);
+		Posix.close (fd);
 		return guid;
 	}
 }
