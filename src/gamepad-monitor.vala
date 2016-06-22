@@ -7,7 +7,7 @@ public class LibGamepad.GamepadMonitor : Object {
 	/**
 	 * The number of plugged in gamepads
 	 */
-	public static uint ngamepads { get; private set; default = 0; }
+	public static uint gamepads_number { get; private set; default = 0; }
 
 	/**
 	 * Emitted when a gamepad is plugged in
@@ -71,7 +71,6 @@ public class LibGamepad.GamepadMonitor : Object {
 	private RawGamepadMonitor raw_gamepad_monitor;
 
 	private static void init_static_if_not () {
-		/*if (ngamepads == null) ngamepads = 0;*/
 		if (identifier_to_raw_gamepad == null)
 			identifier_to_raw_gamepad = new HashTable<string, RawGamepad> (str_hash, str_equal);
 		if (guid_to_raw_name == null)
@@ -79,7 +78,7 @@ public class LibGamepad.GamepadMonitor : Object {
 	}
 
 	private void add_gamepad (RawGamepad raw_gamepad) {
-		ngamepads++;
+		gamepads_number++;
 		identifier_to_raw_gamepad.replace (raw_gamepad.identifier, raw_gamepad);
 		guid_to_raw_name.replace (raw_gamepad.guid.to_string (), raw_gamepad.name);
 	}
@@ -93,7 +92,7 @@ public class LibGamepad.GamepadMonitor : Object {
 		var raw_gamepad = identifier_to_raw_gamepad.get (identifier);
 		if (raw_gamepad == null)
 			return;
-		ngamepads--;
+		gamepads_number--;
 		guid_to_raw_name.remove (raw_gamepad.guid.to_string ());
 		gamepad_unplugged (raw_gamepad.identifier, raw_gamepad.guid, Mappings.get_name (raw_gamepad.guid));
 	}
