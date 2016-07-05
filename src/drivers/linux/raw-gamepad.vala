@@ -1,11 +1,4 @@
 private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
-	public string identifier { get; protected set; }
-	public string name { get; protected set; }
-	public string guid { get; protected set; }
-
-	public uint8 axes_number { get; protected set; default = 0; }
-	public uint8 buttons_number { get; protected set; default = 0; }
-
 	private int fd;
 	private GUdev.Client gudev_client;
 	private uint? event_source_id;
@@ -14,6 +7,21 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 	private uint8 key_map[Linux.Input.KEY_MAX];
 	private uint8 abs_map[Linux.Input.ABS_MAX];
 	private Linux.Input.AbsInfo abs_info[Linux.Input.ABS_MAX];
+
+	private string _identifier;
+	public string identifier { get { return _identifier; } }
+
+	private string _name;
+	public string name { get { return _name; } }
+
+	private string _guid;
+	public string guid { get { return _guid; } }
+
+	private uint8 _axes_number = 0;
+	public uint8 axes_number { get { return _axes_number; } }
+
+	private uint8 _buttons_number = 0;
+	public uint8 buttons_number { get { return _buttons_number; } }
 
 	private int _dpads_number = -1;
 	public uint8 dpads_number {
@@ -35,11 +43,10 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 
 			return (uint8) _dpads_number;
 		}
-		protected set {}
 	}
 
 	public LinuxRawGamepad (string file_name) throws FileError {
-		identifier = file_name;
+		_identifier = file_name;
 		fd = Posix.open (file_name, Posix.O_RDONLY | Posix.O_NONBLOCK);
 
 		if (fd < 0)
@@ -53,8 +60,8 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 		gudev_client = new GUdev.Client ({"input"});
 		gudev_client.uevent.connect (handle_gudev_event);
 
-		name = dev.name;
-		guid = LinuxGuidHelpers.from_dev (dev);
+		_name = dev.name;
+		_guid = LinuxGuidHelpers.from_dev (dev);
 
 		// Poll the events in the default main loop
 		var channel = new IOChannel.unix_new (fd);
@@ -63,14 +70,14 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 		// Initialize dpads, buttons and axes
 		for (var i = Linux.Input.BTN_JOYSTICK; i < Linux.Input.KEY_MAX; i++) {
 			if (dev.has_event_code (Linux.Input.EV_KEY, i)) {
-				key_map[i - Linux.Input.BTN_MISC] = buttons_number;
-				buttons_number++;
+				key_map[i - Linux.Input.BTN_MISC] = _buttons_number;
+				_buttons_number++;
 			}
 		}
 		for (var i = Linux.Input.BTN_MISC; i < Linux.Input.BTN_JOYSTICK; i++) {
 			if (dev.has_event_code (Linux.Input.EV_KEY, i)) {
-				key_map[i - Linux.Input.BTN_MISC] = buttons_number;
-				buttons_number++;
+				key_map[i - Linux.Input.BTN_MISC] = _buttons_number;
+				_buttons_number++;
 			}
 		}
 
@@ -84,9 +91,9 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 			}
 			if (dev.has_event_code (Linux.Input.EV_ABS, i)) {
 				var absinfo = dev.get_abs_info (i);
-				abs_map[i] = axes_number;
-				abs_info[axes_number] = absinfo;
-				axes_number++;
+				abs_map[i] = _axes_number;
+				abs_info[_axes_number] = absinfo;
+				_axes_number++;
 			}
 		}
 	}
