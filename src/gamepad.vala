@@ -73,7 +73,7 @@ public class LibGamepad.Gamepad : Object {
 		StandardGamepadAxis output_axis;
 		StandardGamepadButton output_button;
 
-		mapping.get_button_mapping(button, out type, out output_axis, out output_button);
+		mapping.get_button_mapping (button, out type, out output_axis, out output_button);
 		emit_event (type, output_axis, output_button, value ? 1 : 0);
 	}
 
@@ -82,16 +82,16 @@ public class LibGamepad.Gamepad : Object {
 		StandardGamepadAxis output_axis;
 		StandardGamepadButton output_button;
 
-		mapping.get_axis_mapping(axis, out type, out output_axis, out output_button);
+		mapping.get_axis_mapping (axis, out type, out output_axis, out output_button);
 		emit_event (type, output_axis, output_button, value);
 	}
 
-	private void on_raw_dpad_event (int dpadi, int axis, int value) {
+	private void on_raw_dpad_event (int dpad_index, int axis, int value) {
 		InputType type;
 		StandardGamepadAxis output_axis;
 		StandardGamepadButton output_button;
 
-		mapping.get_dpad_mapping(dpadi, axis, value, out type, out output_axis, out output_button);
+		mapping.get_dpad_mapping (dpad_index, axis, value, out type, out output_axis, out output_button);
 		emit_event (type, output_axis, output_button, value.abs ());
 	}
 

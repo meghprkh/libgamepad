@@ -5,11 +5,6 @@
  */
 public class LibGamepad.GamepadMonitor : Object {
 	/**
-	 * The number of plugged in gamepads
-	 */
-	public static uint gamepads_number { get; private set; default = 0; }
-
-	/**
 	 * Emitted when a gamepad is plugged in
 	 * @param  gamepad    The gamepad
 	 */
@@ -25,15 +20,15 @@ public class LibGamepad.GamepadMonitor : Object {
 
 	public delegate void GamepadCallback (Gamepad gamepad);
 
+	private static HashTable<string, RawGamepad> identifier_to_raw_gamepad;
+	private static HashTable<string, string> guid_to_raw_name;
+
 	/**
-	 * This function allows to iterate over all gamepads
-	 * @param    callback          The callback
+	 * The number of plugged in gamepads
 	 */
-	public void foreach_gamepad (GamepadCallback callback) {
-		identifier_to_raw_gamepad.foreach ((identifier, raw_gamepad) => {
-			callback (new Gamepad (raw_gamepad));
-		});
-	}
+	public uint gamepads_number { get; private set; default = 0; }
+
+	private RawGamepadMonitor raw_gamepad_monitor;
 
 	public GamepadMonitor () {
 		init_static_if_not ();
@@ -43,14 +38,11 @@ public class LibGamepad.GamepadMonitor : Object {
 		raw_gamepad_monitor.gamepad_plugged.connect (on_raw_gamepad_plugged);
 		raw_gamepad_monitor.gamepad_unplugged.connect (on_raw_gamepad_unplugged);
 
-		string guid;
-		string identifier;
 		raw_gamepad_monitor.foreach_gamepad ((raw_gamepad) => {
 			add_gamepad (raw_gamepad);
 		});
 
 	}
-
 
 	/**
 	 * This static function returns a raw gamepad given a guid. It can be used
@@ -66,15 +58,21 @@ public class LibGamepad.GamepadMonitor : Object {
 			return identifier_to_raw_gamepad.get (identifier);
 	}
 
-	private static HashTable<string, RawGamepad> identifier_to_raw_gamepad;
-	private static HashTable<string, string> guid_to_raw_name;
-	private RawGamepadMonitor raw_gamepad_monitor;
-
 	private static void init_static_if_not () {
 		if (identifier_to_raw_gamepad == null)
 			identifier_to_raw_gamepad = new HashTable<string, RawGamepad> (str_hash, str_equal);
 		if (guid_to_raw_name == null)
 			guid_to_raw_name = new HashTable<string, string> (str_hash, str_equal);
+	}
+
+	/**
+	 * This function allows to iterate over all gamepads
+	 * @param    callback          The callback
+	 */
+	public void foreach_gamepad (GamepadCallback callback) {
+		identifier_to_raw_gamepad.foreach ((identifier, raw_gamepad) => {
+			callback (new Gamepad (raw_gamepad));
+		});
 	}
 
 	private void add_gamepad (RawGamepad raw_gamepad) {

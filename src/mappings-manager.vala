@@ -8,17 +8,6 @@ public class LibGamepad.MappingsManager {
 	private static HashTable<string, string> mappings;
 
 	private static bool? inited;
-	private static void init_if_not () {
-		if (inited == null || inited == false) {
-			inited = true;
-			if (names == null)
-				names = new HashTable<string, string> (str_hash, str_equal);
-			if (mappings == null)
-				mappings = new HashTable<string, string> (str_hash, str_equal);
-			MappingsManager.add_from_file (@"$(LibGamepadConstants.PKGDATADIR)/gamecontrollerdb.txt");
-		}
-	}
-
 
 	/**
 	 * Adds mappings from a file
@@ -93,5 +82,16 @@ public class LibGamepad.MappingsManager {
 	public static string? get_mapping (string guid) {
 		init_if_not ();
 		return mappings.get (guid);
+	}
+
+	private static void init_if_not () {
+		if (inited == null || inited == false) {
+			inited = true;
+			if (names == null)
+				names = new HashTable<string, string> (str_hash, str_equal);
+			if (mappings == null)
+				mappings = new HashTable<string, string> (str_hash, str_equal);
+			MappingsManager.add_from_file (@"$(LibGamepadConstants.PKGDATADIR)/gamecontrollerdb.txt");
+		}
 	}
 }

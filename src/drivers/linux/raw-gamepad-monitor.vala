@@ -1,6 +1,7 @@
 private class LibGamepad.LinuxRawGamepadMonitor : Object, RawGamepadMonitor {
-	private GUdev.Client client;
 	public delegate void RawGamepadCallback (RawGamepad raw_gamepad);
+
+	private GUdev.Client client;
 
 	public LinuxRawGamepadMonitor () {
 		client = new GUdev.Client ({"input"});

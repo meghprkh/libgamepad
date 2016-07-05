@@ -5,26 +5,6 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 
 	public uint8 axes_number { get; protected set; default = 0; }
 	public uint8 buttons_number { get; protected set; default = 0; }
-	private int _dpads_number = -1;
-	public uint8 dpads_number {
-		get {
-			if (_dpads_number != -1)
-				return (uint8) _dpads_number;
-
-			_dpads_number = 0;
-			for (var i = Linux.Input.ABS_HAT0X; i <= Linux.Input.ABS_HAT3Y; i += 2) {
-				if (dev.has_event_code (Linux.Input.EV_ABS, i) || dev.has_event_code (Linux.Input.EV_ABS, i+1)) {
-					Linux.Input.AbsInfo? absinfo = dev.get_abs_info (i);
-					if (absinfo == null)
-						continue;
-
-					_dpads_number++;
-				}
-			}
-			return (uint8) _dpads_number;
-		}
-		protected set {}
-	}
 
 	private int fd;
 	private GUdev.Client gudev_client;
@@ -34,6 +14,29 @@ private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 	private uint8 key_map[Linux.Input.KEY_MAX];
 	private uint8 abs_map[Linux.Input.ABS_MAX];
 	private Linux.Input.AbsInfo abs_info[Linux.Input.ABS_MAX];
+
+	private int _dpads_number = -1;
+	public uint8 dpads_number {
+		get {
+			if (_dpads_number != -1)
+				return (uint8) _dpads_number;
+
+			_dpads_number = 0;
+			for (var i = Linux.Input.ABS_HAT0X; i <= Linux.Input.ABS_HAT3Y; i += 2) {
+				if (dev.has_event_code (Linux.Input.EV_ABS, i) ||
+				    dev.has_event_code (Linux.Input.EV_ABS, i + 1)) {
+					var absinfo = dev.get_abs_info (i);
+					if (absinfo == null)
+						continue;
+
+					_dpads_number++;
+				}
+			}
+
+			return (uint8) _dpads_number;
+		}
+		protected set {}
+	}
 
 	public LinuxRawGamepad (string file_name) throws FileError {
 		identifier = file_name;
