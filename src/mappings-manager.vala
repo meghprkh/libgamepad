@@ -3,7 +3,7 @@
  *
  * The client interfaces with this class primarily
  */
-public class LibGamepad.Mappings {
+public class LibGamepad.MappingsManager {
 	private static HashTable<string, string> names;
 	private static HashTable<string, string> mappings;
 
@@ -15,7 +15,7 @@ public class LibGamepad.Mappings {
 				names = new HashTable<string, string> (str_hash, str_equal);
 			if (mappings == null)
 				mappings = new HashTable<string, string> (str_hash, str_equal);
-			Mappings.add_from_file (@"$(LibGamepadConstants.PKGDATADIR)/gamecontrollerdb.txt");
+			MappingsManager.add_from_file (@"$(LibGamepadConstants.PKGDATADIR)/gamecontrollerdb.txt");
 		}
 	}
 

@@ -1,6 +1,4 @@
 int main () {
-	/*LibGamepad.Mappings.add_from_file (@"$(Constants.PKGDATADIR)/gamecontrollerdb.txt");*/
-	/*print (@"$(Constants.PKGDATADIR)");*/
 	var gm = new LibGamepad.GamepadMonitor ();
 	LibGamepad.Gamepad? g = null;
 	gm.gamepad_plugged.connect ((gp) => {

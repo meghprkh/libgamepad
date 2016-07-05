@@ -1,7 +1,7 @@
 ### AutoVala Project ###
 autovala_version: 19
 project_name: libgamepad
-*vala_version: 0.30
+*vala_version: 0.32
 
 
 vala_binary: src/test/libgamepadtest
@@ -31,7 +31,8 @@ vala_check_package: gudev-1.0
 *vala_source: helpers.vala
 *vala_source: input-type.vala
 *vala_source: mapping-helpers.vala
-*vala_source: mappings.vala
+*vala_source: mapping.vala
+*vala_source: mappings-manager.vala
 *vala_source: standard-gamepad-axis.vala
 *vala_source: standard-gamepad-button.vala
 

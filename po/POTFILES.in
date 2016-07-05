@@ -9,6 +9,7 @@ src/gamepad.vala
 src/helpers.vala
 src/input-type.vala
 src/mapping-helpers.vala
-src/mappings.vala
+src/mapping.vala
+src/mappings-manager.vala
 src/standard-gamepad-axis.vala
 src/standard-gamepad-button.vala

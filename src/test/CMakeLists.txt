@@ -20,7 +20,7 @@ link_libraries ( ${DEPS_LIBRARIES} -lLibGamepad )
 link_directories ( ${DEPS_LIBRARY_DIRS} ${CMAKE_BINARY_DIR}/src )
 find_package (Vala REQUIRED)
 include (ValaVersion)
-ensure_vala_version ("0.30" MINIMUM)
+ensure_vala_version ("0.32" MINIMUM)
 include (ValaPrecompile)
 
 set (VALA_PACKAGES ${VALA_PACKAGES} gio-2.0)
