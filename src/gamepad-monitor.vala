@@ -92,6 +92,7 @@ public class LibGamepad.GamepadMonitor : Object {
 			return;
 		gamepads_number--;
 		guid_to_raw_name.remove (raw_gamepad.guid.to_string ());
-		gamepad_unplugged (raw_gamepad.identifier, raw_gamepad.guid, MappingsManager.get_name (raw_gamepad.guid));
+		gamepad_unplugged (raw_gamepad.identifier, raw_gamepad.guid,
+		                   MappingsManager.get_name (raw_gamepad.guid) ?? raw_gamepad.name);
 	}
 }
