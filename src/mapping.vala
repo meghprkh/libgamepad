@@ -15,26 +15,21 @@ public class LibGamepad.Mapping : Object {
 	private InputType[] axes_type;
 	private int[] axes_value;
 	private Dpad[] dpads;
-	public bool mapped { get; private set; default = false; }
-	public string mappingstring { private get; construct; }
 
-	public Mapping (string mappingstring) {
-		Object (mappingstring: mappingstring);
-	}
-
-	construct {
+	public Mapping (string? mappingstring) throws MappingError {
 		if (mappingstring == null || mappingstring == "")
-			return;
+			throw new MappingError.NOT_A_MAPPING ("mappingstring cannot be null or empty");
 
-		mapped = true;
 		var mappings = mappingstring.split (",");
 		foreach (var mapping in mappings) {
 			if (mapping.split (":").length == 2) {
 				var str = mapping.split (":")[0];
 				var real = mapping.split (":")[1];
 				var type = MappingHelpers.map_type (str);
-				if (type == InputType.INVALID)
+				if (type == InputType.INVALID) {
+					if (str != "platform") debug ("Invalid token : %s", str);
 					continue;
+				}
 				var value = MappingHelpers.map_value (str);
 				switch (real[0]) {
 				case 'h':
@@ -75,9 +70,6 @@ public class LibGamepad.Mapping : Object {
 	                              out InputType type,
 	                              out StandardGamepadAxis output_axis,
 	                              out StandardGamepadButton output_button) {
-		 if (!mapped)
- 			return;
-
 		int dpad_position;
 		var dpad = dpads[dpad_index];
 		if (dpad_value == 0)
@@ -100,9 +92,6 @@ public class LibGamepad.Mapping : Object {
 	                              out InputType type,
 	                              out StandardGamepadAxis output_axis,
 	                              out StandardGamepadButton output_button) {
-		if (!mapped)
-			return;
-
 		type = axes_type[axis_number];
 		switch (type) {
 		case InputType.AXIS:
@@ -118,9 +107,6 @@ public class LibGamepad.Mapping : Object {
 	                                out InputType type,
 	                                out StandardGamepadAxis output_axis,
 	                                out StandardGamepadButton output_button) {
-		if (!mapped)
-			return;
-
 		type = buttons_type[button_number];
 		switch (type) {
 		case InputType.AXIS:

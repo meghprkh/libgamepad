@@ -53,18 +53,24 @@ public class LibGamepad.Gamepad : Object {
 	/**
 	 * The mapping object
 	 */
-	public Mapping mapping { get; private set; }
+	public Mapping? mapping { get; private set; }
 
 	public Gamepad (RawGamepad raw_gamepad) throws FileError {
 		this.raw_gamepad = raw_gamepad;
 		raw_name = raw_gamepad.name;
 		guid = raw_gamepad.guid;
 		name = MappingsManager.get_name (guid) ?? raw_name;
-		mapping = new Mapping (MappingsManager.get_mapping (guid));
-		mapped = mapping.mapped;
-		raw_gamepad.button_event.connect (on_raw_button_event);
-		raw_gamepad.axis_event.connect (on_raw_axis_event);
-		raw_gamepad.dpad_event.connect (on_raw_dpad_event);
+		try {
+			mapping = new Mapping (MappingsManager.get_mapping (guid));
+			mapped = true;
+			raw_gamepad.button_event.connect (on_raw_button_event);
+			raw_gamepad.axis_event.connect (on_raw_axis_event);
+			raw_gamepad.dpad_event.connect (on_raw_dpad_event);
+		} catch (MappingError err) {
+			debug ("%s - for %s/%s", err.message, guid, name);
+			mapping = null;
+			mapped = false;
+		}
 		raw_gamepad.unplugged.connect (() => unplugged ());
 	}
 

@@ -30,6 +30,7 @@ vala_check_package: gudev-1.0
 *vala_source: gamepad.vala
 *vala_source: helpers.vala
 *vala_source: input-type.vala
+*vala_source: mapping-error.vala
 *vala_source: mapping-helpers.vala
 *vala_source: mapping.vala
 *vala_source: mappings-manager.vala

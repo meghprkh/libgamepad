@@ -8,6 +8,7 @@ src/gamepad-monitor.vala
 src/gamepad.vala
 src/helpers.vala
 src/input-type.vala
+src/mapping-error.vala
 src/mapping-helpers.vala
 src/mapping.vala
 src/mappings-manager.vala
