@@ -47,6 +47,7 @@ vala_deps += [gudev, libevdev]
 
 library = shared_library('libgamepad',
                          vala_sources,
+                         resources,
                          vala_args: vala_args,
                          install: true,
                          dependencies : vala_deps)

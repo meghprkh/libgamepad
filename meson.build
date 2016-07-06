@@ -8,6 +8,7 @@ gobject = dependency('gobject-2.0', version: '>=2.32')
 gio = dependency('gio-2.0', version: '>=2.32')
 
 
+subdir('data')
 subdir('src')
 
 meson.add_install_script('install.sh')
