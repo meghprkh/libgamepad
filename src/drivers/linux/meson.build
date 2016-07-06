@@ -14,8 +14,10 @@ driver_vala_args = [
 gudev = dependency('gudev-1.0')
 libevdev = dependency('libevdev')
 
-driver = library('driver',
-                 driver_vala_sources,
-                 vala_args: driver_vala_args,
-                 dependencies: vala_deps + [gudev, libevdev],
-                 link_with: [driver_interface])
+driver_lib = library('driver',
+                     driver_vala_sources,
+                     vala_args: driver_vala_args,
+                     dependencies: vala_deps + [gudev, libevdev, driver_interface])
+
+driver = declare_dependency(include_directories: include_directories('.'),
+                            link_with: driver_lib)

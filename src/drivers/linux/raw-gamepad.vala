@@ -1,4 +1,4 @@
-private class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
+public class LibGamepad.LinuxRawGamepad : Object, RawGamepad {
 	private int fd;
 	private GUdev.Client gudev_client;
 	private uint? event_source_id;
