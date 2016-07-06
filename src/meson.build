@@ -19,4 +19,5 @@ subdir('drivers')
 library = shared_library('libgamepad',
                          vala_sources,
                          vala_args: vala_args,
-                         dependencies : vala_deps)
+                         dependencies : vala_deps,
+                         link_with: [driver_interface, driver])
