@@ -91,7 +91,7 @@ public class LibGamepad.MappingsManager {
 				names = new HashTable<string, string> (str_hash, str_equal);
 			if (mappings == null)
 				mappings = new HashTable<string, string> (str_hash, str_equal);
-			MappingsManager.add_from_file (@"$(LibGamepadConstants.PKGDATADIR)/gamecontrollerdb.txt");
+			/*MappingsManager.add_from_file (@"$(LibGamepadConstants.PKGDATADIR)/gamecontrollerdb.txt");*/
 		}
 	}
 }
