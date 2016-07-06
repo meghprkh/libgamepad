@@ -13,7 +13,13 @@ vala_sources = [
     'standard-gamepad-button.vala',
 ]
 
-vala_args = ['--vapi=libgamepad.vapi', '--header=libgamepad.h']
+vala_args = [
+    '--library=libgamepad-1.0',
+    '--shared-library=libgamepad',
+    '--vapi=libgamepad.vapi',
+    '--header=libgamepad.h',
+    '--gir=libgamepad-1.0.gir'
+]
 
 vala_deps = [glib, gobject, gio]
 
