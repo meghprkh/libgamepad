@@ -49,11 +49,12 @@ install_headers(meson.current_build_dir() + '/../libgamepad.h')
 install_data('libgamepad.deps', install_dir: 'share/vala/vapi')
 
 pkg_mod = import('pkgconfig')
-pkg_mod.generate(libraries : library,
-                 version : '1.0',
-                 name : 'libgamepad',
+pkg_mod.generate(requires: 'gio-2.0',
+                 libraries : library,
+                 version : meson.project_version(),
+                 name : 'LibGamepad',
                  filebase : 'libgamepad',
-                 description : 'A Library to barnicate your foos.')
+                 description : 'A simple library to handle gamepads.')
 
 # library_dep = declare_dependency(include_directories: include_directories('.'),
 #                                  link_with: library)
