@@ -7,23 +7,46 @@ vala_sources = [
     'mapping-helpers.vala',
     'mappings-manager.vala',
     'mapping.vala',
+    'raw-gamepad-interface.vala',
+    'raw-gamepad-monitor-interface.vala',
     'standard-gamepad-axis.vala',
     'standard-gamepad-button.vala',
-    'drivers/interface/raw-gamepad-monitor.vala',
-    'drivers/interface/raw-gamepad.vala',
 ]
+
+vala_args = ['--vapi=libgamepad.vapi', '--header=libgamepad.h']
 
 vala_deps = [glib, gobject, gio]
 
-subdir('drivers')
+# Linux
+
+vala_sources += [
+    'drivers/linux/guid-helpers.vala',
+    'drivers/linux/raw-gamepad.vala',
+    'drivers/linux/raw-gamepad-monitor.vala',
+]
+
+vala_args += [
+    '--pkg=posix',
+    '--pkg=linux',
+    '--vapidir=' + meson.current_source_dir() + '/drivers/linux/vapis/'
+]
+
+gudev = dependency('gudev-1.0')
+libevdev = dependency('libevdev')
+
+vala_deps += [gudev, libevdev]
+
+
+# Main library
 
 library = shared_library('libgamepad',
                          vala_sources,
-                         vala_args: ['--vapi=libgamepad.vapi', '--header=libgamepad.h'],
+                         vala_args: vala_args,
                          install: true,
-                         dependencies : vala_deps + [driver])
+                         dependencies : vala_deps)
 
 install_headers(meson.current_build_dir() + '/../libgamepad.h')
+install_data('libgamepad.deps', install_dir: 'share/vala/vapi')
 
 pkg_mod = import('pkgconfig')
 pkg_mod.generate(libraries : library,
