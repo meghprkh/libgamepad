@@ -5,13 +5,14 @@ This is a GLib/GObject-based library written in Vala to simplify interactions wi
 
 Building
 ========
-This project is built using cmake (so make sure you have cmake installed). Its cmake configuration is built using the awesome [autovala](https://github.com/rastersoft/autovala) (required only for development).
+This project is built using [mesonbuild](http://mesonbuild.com/) (so make sure you have mesonbuild installed).
+
 ```
-mkdir install
-cd install
-cmake .. -DBUILD_VALADOC=ON
-make
-sudo make install
+mkdir build
+meson build
+cd build
+ninja-build
+sudo ninja-build install
 sudo ldconfig
 ```
 

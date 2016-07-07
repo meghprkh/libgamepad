@@ -8,6 +8,7 @@ public class LibGamepad.MappingsManager {
 	private static HashTable<string, string> mappings;
 
 	private static bool? inited;
+	private static string platformstr;
 
 	/**
 	 * Adds mappings from a file
@@ -55,7 +56,7 @@ public class LibGamepad.MappingsManager {
 		if (mappingstr == "" || mappingstr[0] == '#')
 			return;
 
-		if (mappingstr.index_of ("platform") == -1 || mappingstr.index_of ("platform:Linux") != -1) {
+		if (mappingstr.index_of ("platform") == -1 || mappingstr.index_of ("platform:" + platformstr) != -1) {
 			var split = mappingstr.split (",", 3);
 			names.replace (split[0], split[1]);
 			mappings.replace (split[0], split[2]);
@@ -87,11 +88,18 @@ public class LibGamepad.MappingsManager {
 	private static void init_if_not () {
 		if (inited == null || inited == false) {
 			inited = true;
+			#if PLATFORM_LINUX
+				platformstr = "Linux";
+			#elif PLATFORM_WINDOWS
+				platformstr = "Windows";
+			#elif PLATFORM_OSX
+				platformstr = "Mac OS X";
+			#endif
 			if (names == null)
 				names = new HashTable<string, string> (str_hash, str_equal);
 			if (mappings == null)
 				mappings = new HashTable<string, string> (str_hash, str_equal);
-			MappingsManager.add_from_file (@"$(LibGamepadConstants.PKGDATADIR)/gamecontrollerdb.txt");
+			MappingsManager.add_from_resource ("/org/gnome/LibGamepad/gamecontrollerdb.txt");
 		}
 	}
 }

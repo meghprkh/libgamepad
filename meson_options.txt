@@ -1,0 +1,2 @@
+option('enable_test', type : 'boolean', value : true, description: 'enable libgamepadtest program')
+option('enable_docs', type : 'boolean', value : false, description: 'enable vapi-comments and generate valadoc if present')
