@@ -19,3 +19,7 @@ sudo ldconfig
 Running
 =======
 This comes with a sample test program `libgamepadtest`. You can run it to test the program.
+
+License
+=======
+This project is distributed under the LGPLv3 license.
