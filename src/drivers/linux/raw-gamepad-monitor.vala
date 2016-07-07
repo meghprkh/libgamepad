@@ -1,4 +1,4 @@
-public class LibGamepad.LinuxRawGamepadMonitor : Object, RawGamepadMonitor {
+private class LibGamepad.LinuxRawGamepadMonitor : Object, RawGamepadMonitor {
 	public delegate void RawGamepadCallback (RawGamepad raw_gamepad);
 
 	private GUdev.Client client;
