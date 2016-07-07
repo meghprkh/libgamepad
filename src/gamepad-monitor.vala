@@ -33,7 +33,9 @@ public class LibGamepad.GamepadMonitor : Object {
 	public GamepadMonitor () {
 		init_static_if_not ();
 
-		raw_gamepad_monitor = new LinuxRawGamepadMonitor ();
+		#if PLATFORM_LINUX
+			raw_gamepad_monitor = new LinuxRawGamepadMonitor ();
+		#endif
 
 		raw_gamepad_monitor.gamepad_plugged.connect (on_raw_gamepad_plugged);
 		raw_gamepad_monitor.gamepad_unplugged.connect (on_raw_gamepad_unplugged);
