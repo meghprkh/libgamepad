@@ -14,5 +14,3 @@ subdir('src')
 if get_option('enable_test')
     subdir('libgamepadtest')
 endif
-
-meson.add_install_script('install.sh')

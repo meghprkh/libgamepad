@@ -56,6 +56,8 @@ libgamepad = declare_dependency(link_with: libgamepad_lib,
                                 include_directories: include_directories('.'))
 
 install_headers(meson.current_build_dir() + '/libgamepad.h')
+install_headers(meson.current_build_dir() + '/libgamepad.vapi',
+                install_dir: 'share/vala/vapi')
 install_data('libgamepad.deps', install_dir: 'share/vala/vapi')
 
 pkg_mod = import('pkgconfig')
