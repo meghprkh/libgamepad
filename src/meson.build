@@ -17,7 +17,8 @@ vala_sources = [
 vala_args = [
     '--library=libgamepad-1.0',
     '--shared-library=libgamepad',
-    '--gir=libgamepad-1.0.gir'
+    '--gir=libgamepad-1.0.gir',
+    '--vapi-comments', # preserve comments in the generated VAPI
 ]
 
 vala_deps = [glib, gobject, gio]
