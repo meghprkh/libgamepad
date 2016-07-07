@@ -16,7 +16,7 @@ if get_option('enable_test')
 endif
 
 if get_option('enable_docs')
-    if run_command('valadoc', '--help').returncode() == 0
+    if run_command('which', 'valadoc').returncode() == 0
         # Check if valadoc present and then if so generate the valadoc
         # TODO : Install the generated valadoc
         libgamepad_docs = custom_target('libgamepad_docs',
@@ -32,5 +32,7 @@ if get_option('enable_docs')
                                             '--force',
                                             meson.current_build_dir() + '/src/libgamepad.vapi'
                                         ])
+    else
+        message('Didnot find valadoc installed on your system. Not generating valadoc.')
     endif
 endif
