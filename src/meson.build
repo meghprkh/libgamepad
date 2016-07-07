@@ -18,8 +18,11 @@ vala_args = [
     '--library=libgamepad-1.0',
     '--shared-library=libgamepad',
     '--gir=libgamepad-1.0.gir',
-    '--vapi-comments', # preserve comments in the generated VAPI
 ]
+
+if get_option('enable_docs')
+    vala_args += '--vapi-comments' # preserve the documentation comments for valadoc
+endif
 
 vala_deps = [glib, gobject, gio]
 
