@@ -1,4 +1,5 @@
 vala_sources = [
+    'libgamepad.vala',
     'gamepad-monitor.vala',
     'gamepad.vala',
     'helpers.vala',
@@ -16,8 +17,6 @@ vala_sources = [
 vala_args = [
     '--library=libgamepad-1.0',
     '--shared-library=libgamepad',
-    '--vapi=libgamepad.vapi',
-    '--header=libgamepad.h',
     '--gir=libgamepad-1.0.gir'
 ]
 
@@ -45,25 +44,23 @@ vala_deps += [gudev, libevdev]
 
 # Main library
 
-library = shared_library('libgamepad',
-                         vala_sources,
-                         resources,
-                         vala_args: vala_args,
-                         install: true,
-                         dependencies : vala_deps)
+libgamepad_lib = shared_library('gamepad',
+                                vala_sources,
+                                resources,
+                                vala_args: vala_args,
+                                install: true,
+                                dependencies : vala_deps)
 
-install_headers(meson.current_build_dir() + '/../libgamepad.h')
+libgamepad = declare_dependency(link_with: libgamepad_lib,
+                                include_directories: include_directories('.'))
+
+install_headers(meson.current_build_dir() + '/libgamepad.h')
 install_data('libgamepad.deps', install_dir: 'share/vala/vapi')
 
 pkg_mod = import('pkgconfig')
 pkg_mod.generate(requires: 'gio-2.0',
-                 libraries : library,
+                 libraries : libgamepad_lib,
                  version : meson.project_version(),
                  name : 'LibGamepad',
                  filebase : 'libgamepad',
                  description : 'A simple library to handle gamepads.')
-
-# library_dep = declare_dependency(include_directories: include_directories('.'),
-#                                  link_with: library)
-#
-# subdir('test')

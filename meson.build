@@ -10,5 +10,6 @@ gio = dependency('gio-2.0', version: '>=2.32')
 
 subdir('data')
 subdir('src')
+subdir('libgamepadtest')
 
 meson.add_install_script('install.sh')
